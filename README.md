@@ -8,3 +8,6 @@ Various configuaration files for archlinux.
 2. clone the epository into ~/dotfiles
 3. run `stow <package>` to symlink all configuration files for that package to $HOME (e.g. `stow compton`
 will symlink compton.conf to ~/.config/compton.conf
+
+More information about using `stow` to manage your dotfiles can be found
+[here](http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html)
