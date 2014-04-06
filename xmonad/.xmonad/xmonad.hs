@@ -11,6 +11,7 @@ import XMonad.Hooks.UrgencyHook
 
 import XMonad.Layout.Named
 import XMonad.Layout.NoBorders
+import XMonad.Layout.PerWorkspace
 
 import XMonad.Prompt
 import XMonad.Prompt.AppendFile
@@ -20,8 +21,6 @@ import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.Loggers
 
-import XMonad.Config.Xfce
-
 import System.IO
 
 import qualified XMonad.StackSet as W   -- manageHook rules
@@ -29,11 +28,10 @@ import qualified XMonad.StackSet as W   -- manageHook rules
 main :: IO()
 main = do
         status <- spawnPipe myDzenStatus
-        -- conky  <- spawnPipe myDzenConky
         xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
             { modMask            = mod4Mask
             , terminal           = myTerminal
-            , borderWidth        = 2
+            , borderWidth        = 1
             , normalBorderColor  = "#dddddd"
             , focusedBorderColor = "#0000ff"
             , handleEventHook    = fullscreenEventHook
@@ -50,7 +48,7 @@ myTerminal :: String
 myTerminal = "urxvt"
 
 myWorkspaces :: [String]
-myWorkspaces =  ["1","2","3","4","5"]
+myWorkspaces =  ["web","term","music","doc","play"]
 
 myScratchpads = [ NS "term" spawnTerm findTerm manageTerm
                 , NS "bashrun" spawnBash findBash manageBash
@@ -74,11 +72,13 @@ myScratchpads = [ NS "term" spawnTerm findTerm manageTerm
         t = 0.05
         l = (1 - w)/2
 
-myLayoutHook = avoidStruts $ smartBorders ( full ||| mtiled ||| tiled )
-  where
-    full    = named "X" $ Full
-    mtiled  = named "M" $ Mirror tiled
-    tiled   = named "T" $ Tall 1 (5/100) (2/(1+(toRational(sqrt(5)::Double))))
+myLayoutHook = avoidStruts
+  $ onWorkspace "web" ( full ||| mtiled ||| tiled )
+  $ smartBorders ( mtiled ||| tiled ||| full )
+    where
+      full    = Full
+      mtiled  = Mirror tiled
+      tiled   = Tall 1 (5/100) (2/(1+(toRational(sqrt(5)::Double))))
 
 myManageHook = composeAll
   [ className =? "MPlayer"        --> doFloat
@@ -100,10 +100,15 @@ myDzenPP  = dzenPP
   , ppHidden  = dzenColor "#dddddd" "" . pad . noScratchPad
   , ppHiddenNoWindows = dzenColor "#777777" "" . pad . noScratchPad
   , ppUrgent  = dzenColor "#ff0000" "" . pad
-  , ppSep     = " "
-  , ppLayout  = dzenColor "#aaaaaa" "" . pad
-  , ppTitle   = dzenColor "#ffffff" ""
-  -- , ppExtras  = [fixedWidthL AlignRight "." 99 $ date "%a %b %d"]
+  , ppSep     = ""
+  , ppTitle   = dzenColor "#ffffff" "" . pad
+  , ppLayout  = dzenColor "#3399ff" "" .
+              (\x -> case x of
+                "Full" -> pad "^i(/home/chris/.xmonad/icons/monocle.xbm)"
+                "Tall" -> pad "^i(/home/chris/.xmonad/icons/tile.xbm)"
+                "Mirror Tall" -> pad "^i(/home/chris/.xmonad/icons/mtile.xbm)"
+                _ -> "LOL"
+              )
   }
     where
       noScratchPad ws = if ws == "NSP" then "" else ws
