@@ -20,7 +20,7 @@ import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.Loggers
 
-import XMonad.Config.Desktop
+import XMonad.Config.Xfce
 
 import System.IO
 
@@ -30,7 +30,7 @@ main :: IO()
 main = do
         status <- spawnPipe myDzenStatus
         -- conky  <- spawnPipe myDzenConky
-        xmonad $ withUrgencyHook NoUrgencyHook $ ewmh desktopConfig
+        xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
             { modMask            = mod4Mask
             , terminal           = myTerminal
             , borderWidth        = 2
