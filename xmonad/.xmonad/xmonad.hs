@@ -2,6 +2,8 @@ import XMonad
 import XMonad.Actions.CycleWindows
 import XMonad.Actions.CycleWS
 import XMonad.Actions.DwmPromote
+import XMonad.Actions.MouseResize
+import XMonad.Layout.WindowArranger
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -12,6 +14,8 @@ import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.Named
 import XMonad.Layout.NoBorders
 import XMonad.Layout.PerWorkspace
+import XMonad.Layout.SimplestFloat
+import XMonad.Layout.Tabbed
 
 import XMonad.Prompt
 import XMonad.Prompt.AppendFile
@@ -48,7 +52,7 @@ myTerminal :: String
 myTerminal = "urxvt"
 
 myWorkspaces :: [String]
-myWorkspaces =  ["web","term","music","doc","play"]
+myWorkspaces =  ["web","term","music","doc","float","irc"]
 
 myScratchpads = [ NS "term" spawnTerm findTerm manageTerm
                 , NS "bashrun" spawnBash findBash manageBash
@@ -73,12 +77,28 @@ myScratchpads = [ NS "term" spawnTerm findTerm manageTerm
         l = (1 - w)/2
 
 myLayoutHook = avoidStruts
-  $ onWorkspace "web" ( full ||| mtiled ||| tiled )
-  $ smartBorders ( mtiled ||| tiled ||| full )
+  $ mouseResize
+  $ windowArrange
+  $ smartBorders
+  $ onWorkspace "web" ( myTabbed ||| full ||| mtiled ||| tiled ||| float )
+  $ onWorkspace "float" ( float ||| myTabbed ||| mtiled ||| tiled ||| full )
+  $ ( mtiled ||| tiled ||| full ||| myTabbed ||| float )
     where
+      myTabbed  = tabbed shrinkText myTabConfig
+      float   = simplestFloat
       full    = Full
       mtiled  = Mirror tiled
       tiled   = Tall 1 (5/100) (2/(1+(toRational(sqrt(5)::Double))))
+
+myTabConfig = defaultTheme { activeColor         = "#222222"
+                           , inactiveColor       = "##22222"
+                           , activeBorderColor   = "#222222"
+                           , inactiveBorderColor = "#222222"
+                           , activeTextColor     = "#3399ff"
+                           , inactiveTextColor   = "#777777"
+                           , decoHeight          = 20
+                           , fontName            = "xft:DejaVui Sans:size=8"
+                           }
 
 myManageHook = composeAll
   [ className =? "MPlayer"        --> doFloat
@@ -87,6 +107,8 @@ myManageHook = composeAll
   , className =? "Nm-connection-editor" --> doCenterFloat
   , className =? "Wrapper" --> doFloatAt 0.835 0.02
   , className =? "Nitrogen" --> doCenterFloat
+  , className =? "Xchat" --> doF (W.shift (myWorkspaces !! 4))
+  , isFullscreen --> (doF W.focusDown <+> doFullFloat)
   , isDialog  --> doCenterFloat
   ]
 
@@ -100,14 +122,16 @@ myDzenPP  = dzenPP
   , ppHidden  = dzenColor "#dddddd" "" . pad . noScratchPad
   , ppHiddenNoWindows = dzenColor "#777777" "" . pad . noScratchPad
   , ppUrgent  = dzenColor "#ff0000" "" . pad
-  , ppSep     = ""
+  , ppSep     = " "
   , ppTitle   = dzenColor "#ffffff" "" . pad
   , ppLayout  = dzenColor "#3399ff" "" .
               (\x -> case x of
-                "Full" -> pad "^i(/home/chris/.xmonad/icons/monocle.xbm)"
-                "Tall" -> pad "^i(/home/chris/.xmonad/icons/tile.xbm)"
-                "Mirror Tall" -> pad "^i(/home/chris/.xmonad/icons/mtile.xbm)"
-                _ -> "LOL"
+                "Full" -> "^i(/home/chris/.xmonad/icons/monocle.xbm)"
+                "Tall" -> "^i(/home/chris/.xmonad/icons/tile.xbm)"
+                "Mirror Tall" -> "^i(/home/chris/.xmonad/icons/mtile.xbm)"
+                "SimplestFloat" -> "^i(/home/chris/.xmonad/icons/float.xbm)"
+                "Tabbed Simplest" -> "^i(/home/chris/.xmonad/icons/tabbed.xbm)"
+                
               )
   }
     where

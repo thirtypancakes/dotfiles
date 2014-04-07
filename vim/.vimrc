@@ -12,17 +12,18 @@ filetype off
 
 " Bundle 'jellybeans.vim'
 " Bundle 'croaker/mustang-vim'
-" Bundle 'houtsnip/vim-emacscommandline'
-" Bundle 'SirVer/ultisnips'
+Bundle 'houtsnip/vim-emacscommandline'
+Bundle 'SirVer/ultisnips'
 " Bundle 'vim-scripts/Vim-R-plugin'
-" Bundle "LaTeX-Box-Team/LaTeX-Box"
+Bundle "LaTeX-Box-Team/LaTeX-Box"
 " Bundle "skwp/vim-colors-solarized"
 " Bundle "majutsushi/tagbar.git"
-" Bundle "airblade/vim-gitgutter.git"
-" Bundle "tomtom/tcomment_vim.git"
+Bundle "airblade/vim-gitgutter.git"
+Bundle "tomtom/tcomment_vim.git"
 " Bundle "bling/vim-airline"
 " Bundle "fweep/vim-tabber"
 Bundle "bling/vim-airline"
+Bundle "Valloric/YouCompleteMe"
 
 filetype plugin indent on
 
