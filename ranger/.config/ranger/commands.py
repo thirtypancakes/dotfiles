@@ -77,6 +77,7 @@
 # ===================================================================
 
 from ranger.api.commands import *
+import subprocess
 
 class alias(Command):
     """:alias <newcommand> <oldcommand>
@@ -1242,3 +1243,39 @@ class log(Command):
 
         pager = os.environ.get('PAGER', ranger.DEFAULT_PAGER)
         self.fm.run([pager, tmp.name])
+
+class trash(Command):
+    """:trash [-q]
+
+    Moves the selected files to the trash bin using Ali Rantakari's 'trash' 
+    program. Optionally takes the -q flag to suppress listing the files 
+    afterwards.
+    """
+
+    def execute(self):
+
+        action = ['trash']
+        action.extend(f.path for f in self.fm.thistab.get_selection())
+        self.fm.execute_command(action)
+
+        if not self.rest(1) == "-q":
+            names = []
+            names.extend(f.basename for f in self.fm.thistab.get_selection())
+            self.fm.notify("Files moved to the trash: " + ', '.join(map(str, names)))
+
+
+class empty_trash(Command):
+    """:empty_trash [-s] [secure]
+
+    Empties the trash bin using Ali Rantakari's 'trash' program. Add the 
+    optional -s flag for emptying securely, or the string 'secure'.
+    """
+
+    def execute(self):
+
+        action = ['trash']
+        if self.rest(1) == "-s" or self.rest(1) == "secure":
+            action.extend(['-es'])
+        else:
+            action.extend(['-e'])
+        self.fm.execute_command(action)

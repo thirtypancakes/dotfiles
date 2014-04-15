@@ -10,7 +10,8 @@ xsetroot -cursor_name left_ptr &
 
 (sleep 2s && xmodmap -e "keycode 49 = numbersign asciitilde") &
 
-compton -b &
+(sleep 4s && compton -b --shadow-exclude-reg x20+0-0) &
+
 
 nitrogen --restore &
 
