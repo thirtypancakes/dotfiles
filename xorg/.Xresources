@@ -2,6 +2,8 @@
 !
 ! http://ethanschoonover.com/solarized
 
+Emacs.font: DejaVu Sans Mono-10
+
 URxvt.intensifyStyles:      true
 URxvt.depth:                32
 URxvt.geometry:             90x30

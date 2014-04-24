@@ -1,4 +1,5 @@
 import XMonad
+import XMonad.Config.Kde
 import XMonad.Actions.CycleWindows
 import XMonad.Actions.CycleWS
 import XMonad.Actions.DwmPromote
@@ -43,21 +44,21 @@ import qualified XMonad.StackSet as W   -- manageHook rules
 
 main :: IO()
 main = do
-  status <- spawnPipe myDzenStatus
-  xmonad $ withUrgencyHook NoUrgencyHook $ ewmh defaultConfig
+  -- status <- spawnPipe myDzenStatus
+  xmonad $ withUrgencyHook NoUrgencyHook $ ewmh kdeConfig
     { modMask            = mod4Mask
     , terminal           = myTerminal
     , borderWidth        = 2
     , normalBorderColor  = "#dddddd"
-    , focusedBorderColor = "#d33682"
+    , focusedBorderColor = "#268bd2"
     , handleEventHook    = fullscreenEventHook
     , workspaces         = myWorkspaces
     , layoutHook         = myLayoutHook
     , manageHook         = manageDocks <+> myManageHook
-                         <+> namedScratchpadManageHook myScratchpads
-                         <+> manageHook defaultConfig
-    , logHook            = myLogHook status
-    ,  startupHook = return () >> checkKeymap defaultConfig myKeys
+                           <+> namedScratchpadManageHook myScratchpads
+                           <+> manageHook defaultConfig
+    -- , logHook            = myLogHook status
+    , startupHook = return () >> checkKeymap defaultConfig myKeys
 
     }
     `additionalKeysP` myKeys
@@ -146,7 +147,7 @@ myTabConfig = defaultTheme
   , inactiveColor       = "#2d2d2d"
   , activeBorderColor   = "#2d2d2d"
   , inactiveBorderColor = "#2d2d2d"
-  , activeTextColor     = "#d33682"
+  , activeTextColor     = "#268bd2"
   , inactiveTextColor   = "#777777"
   , decoHeight          = 25
   , fontName            = "xft:DejaVu Sans:size=10"
@@ -156,7 +157,7 @@ myTabConfig = defaultTheme
 myXPConfig = defaultXPConfig
    { bgColor         = "#2d2d2d"
    , fgColor         = "#777777"
-   , fgHLight        = "#d33682"
+   , fgHLight        = "#268bd2"
    , bgHLight        = "#2d2d2d"
    , borderColor     = "#2d2d2d"
    , position        = Top
@@ -172,13 +173,13 @@ myDzenStyle  = " -dock -h '20' -fg '#777777' -bg '#2d2d2d' -fn 'xft:DejaVu Sans:
 myLogHook h = dynamicLogWithPP $ myDzenPP { ppOutput = hPutStrLn h }
 
 myDzenPP  = dzenPP
-  { ppCurrent = dzenColor "#d33682" "" . pad
+  { ppCurrent = dzenColor "#268bd2" "" . pad
   , ppHidden  = dzenColor "#dddddd" "" . pad . noScratchPad
   , ppHiddenNoWindows = dzenColor "#777777" "" . pad . noScratchPad
   , ppUrgent  = dzenColor "#ff0000" "" . pad
   , ppSep     = " "
   , ppTitle   = dzenColor "#ffffff" "" . pad
-  , ppLayout  = dzenColor "#d33682" "" .
+  , ppLayout  = dzenColor "#268bd2" "" .
               (\x -> case x of
                 "Full"            -> "^i(/home/chris/.xmonad/icons/monocle.xbm)"
                 "Tall"            -> "^i(/home/chris/.xmonad/icons/tile.xbm)"

@@ -1,17 +1,24 @@
-TEXMFHOME=$HOME/.texmf
-OSFONTDIR=${HOME}/.fonts:/usr/share/fonts//:/usr/share/texmf/fonts//
-
+# exports
 export TERM=xterm-256color
 export EDITOR=vim
+export TEXMFHOME=$HOME/.texmf
+export OSFONTDIR=${HOME}/.fonts:/usr/share/fonts//:/usr/share/texmf/fonts//
 
+
+# better dir colors
 eval `dircolors /etc/dir_colors`
 
+# aliases
 alias pacman='aura'
 
-export LESS_TERMCAP_mb=$'\E[01;36m'       # begin blinking
-export LESS_TERMCAP_md=$'\E[01;36;1;74m'  # begin bold
-export LESS_TERMCAP_me=$'\E[0m'           # end mode
-export LESS_TERMCAP_se=$'\E[0m'           # end standout-mode
-export LESS_TERMCAP_so=$'\E[38;5;246m'    # begin standout-mode - info box
-export LESS_TERMCAP_ue=$'\E[0m'           # end underline
-export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
+# don't need to rehash after installation
+# zstyle ":completion:*:commands" rehash 1
+
+# better man colours
+export LESS_TERMCAP_mb=$'\E[01;36m'
+export LESS_TERMCAP_md=$'\E[01;36;1;74m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[38;5;246m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[04;38;5;146m'

@@ -15,8 +15,8 @@ Bundle 'LaTeX-Box-Team/LaTeX-Box'
 Bundle 'majutsushi/tagbar.git'
 Bundle 'airblade/vim-gitgutter.git'
 Bundle 'tomtom/tcomment_vim.git'
+Bundle 'bling/vim-bufferline'
 Bundle 'bling/vim-airline'
-Bundle 'Valloric/YouCompleteMe'
 Bundle 'junegunn/vim-easy-align'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'tpope/vim-fugitive'
@@ -24,10 +24,16 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'emacscommandline'
 Bundle 'kien/ctrlp.vim'
 Bundle 'scrooloose/nerdtree'
+Bundle 'plasticboy/vim-markdown'
+Bundle 'isnowfy/python-vim-instant-markdown'
+Bundle 'Shougo/neocomplete.vim'
+Bundle 'terryma/vim-expand-region'
+Bundle 'justinmk/vim-sneak'
 
 filetype plugin indent on
 
-" Misc
+" Sets
+" misc
 set autochdir
 set nowrap
 set noshowmode
@@ -41,24 +47,20 @@ set gcr=a:blinkon0
 set visualbell
 set autoread
 
-" Completion
+" completion
 set wildmode=full
 set wildmenu
 
-" Leader key
-let mapleader=','
-let maplocalleader=','
-
-" Search settings
+" search settings
 set incsearch
 set hlsearch
 
-" Backup stuff
+" backup stuff
 set noswapfile
 set nobackup
 set nowritebackup
 
-" Indenting and tabs
+" indenting and tabs
 set autoindent
 set smartindent
 set smarttab
@@ -67,15 +69,16 @@ set softtabstop=2
 set tabstop=2
 set expandtab
 
-" For airline
+" for airline
 set laststatus=2
 
-" Colourscheme
+" colourscheme
 set background=dark
 syntax on
 colorscheme solarized
 
-" Airline
+" Lets
+" airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#bufferline#overwrite_variables = 1
 let g:airline_theme = 'solarizedish'
@@ -86,13 +89,12 @@ let g:airline_theme = 'solarizedish'
 " let g:bufferline_show_bufnr = 0
 " let g:bufferline_echo = 0
 
-vmap <Enter> <Plug>(EasyAlign)
-nmap <Leader>a <Plug>(EasyAlign)
-
 " ctrlp
 let g:ctrlp_show_hidden = 1
-map <C-f> :CtrlPLine<CR>
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+let g:ctrlp_use_caching = 0
 
+" easyalign
 let g:easy_align_delimiters = {
       \ '>': { 'pattern': '>>\|=>\|>' },
       \ '/': { 'pattern': '//\+\|/\*\|\*/', 'ignore_groups': ['String'] },
@@ -116,6 +118,23 @@ let g:easy_align_delimiters = {
       \   }
       \ }
 
+" neocomplete
+let g:neocomplete#enable_at_startup = 1
+
+" nerdtree
+let g:NERDTreeShowHidden=1
+
+" Some custom highlighting
+hi VertSplit ctermfg=bg ctermbg=bg
+
+" leader key
+let mapleader="\<Space>"
+let maplocalleader="\<Space>"
+
+" easyalign
+vmap <Enter> <Plug>(EasyAlign)
+nmap <Leader>a <Plug>(EasyAlign)
+
 " nerdtree
 map <C-e> :NERDTreeToggle<CR>
 
@@ -123,5 +142,33 @@ map <C-e> :NERDTreeToggle<CR>
 nmap <C-1> :bn<CR>
 nmap <C-2> :bp<CR>
 
-" Some custom highlighting
-hi VertSplit ctermfg=bg ctermbg=bg
+" ctrlp
+map <C-f> :CtrlPLine<CR>
+noremap <Leader>o :CtrlP<CR>
+
+" better clipboard copy paste
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
+
+vnoremap <silent> y y`]
+vnoremap <silent> p p`]
+nnoremap <silent> p p`]
+
+" sneek
+nmap f <Plug>Sneak_s
+nmap F <Plug>Sneak_S
+xmap f <Plug>Sneak_s
+xmap F <Plug>Sneak_S
+omap f <Plug>Sneak_s
+omap F <Plug>Sneak_S
+
+" expand-region
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
+
+" neocomplete
+inoremap <expr><C-g> neocomplete#undo_completion()
