@@ -46,6 +46,7 @@ set showmode
 set gcr=a:blinkon0
 set visualbell
 set autoread
+set hidden
 
 " completion
 set wildmode=full
@@ -125,7 +126,7 @@ let g:neocomplete#enable_at_startup = 1
 let g:NERDTreeShowHidden=1
 
 " Some custom highlighting
-hi VertSplit ctermfg=bg ctermbg=bg
+hi VertSplit guifg=bg guibg=bg
 
 " leader key
 let mapleader="\<Space>"
