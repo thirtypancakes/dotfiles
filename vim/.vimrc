@@ -3,13 +3,13 @@ set nocompatible
 
 " Vundle
 set rtp+=~/.vim/bundle/vundle/
-set rtp+=~/.vim/bundle/my-airline/ " custom airline theme
+" set rtp+=~/.vim/bundle/my-airline/ " custom airline theme
 call vundle#rc()
 Bundle 'gmarik/vundle'
 
 filetype off
 
-Bundle 'houtsnip/vim-emacscommandline'
+" Bundle 'houtsnip/vim-emacscommandline'
 Bundle 'SirVer/ultisnips'
 Bundle 'LaTeX-Box-Team/LaTeX-Box'
 Bundle 'majutsushi/tagbar.git'
@@ -27,8 +27,10 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'plasticboy/vim-markdown'
 Bundle 'isnowfy/python-vim-instant-markdown'
 Bundle 'Shougo/neocomplete.vim'
-Bundle 'terryma/vim-expand-region'
+" Bundle 'terryma/vim-expand-region'
 Bundle 'justinmk/vim-sneak'
+" Bundle 'scrooloose/syntastic'
+Bundle 'https://github.com/thirtypancakes/my-airline.git'
 
 filetype plugin indent on
 

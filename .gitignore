@@ -4,3 +4,4 @@ ranger/.config/ranger/tagged
 ranger/.config/ranger/history
 ranger/.config/ranger/__pycache__/*
 fonts/*
+openbox/*
