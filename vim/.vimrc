@@ -18,7 +18,7 @@ Bundle 'tomtom/tcomment_vim.git'
 Bundle 'bling/vim-bufferline'
 Bundle 'bling/vim-airline'
 Bundle 'junegunn/vim-easy-align'
-Bundle 'airblade/vim-gitgutter'
+" Bundle 'airblade/vim-gitgutter'
 Bundle 'tpope/vim-fugitive'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'emacscommandline'
@@ -30,7 +30,7 @@ Bundle 'Shougo/neocomplete.vim'
 " Bundle 'terryma/vim-expand-region'
 Bundle 'justinmk/vim-sneak'
 " Bundle 'scrooloose/syntastic'
-Bundle 'https://github.com/thirtypancakes/my-airline.git'
+Bundle 'thirtypancakes/my-airline.git'
 
 filetype plugin indent on
 
