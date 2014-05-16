@@ -3,34 +3,37 @@ set nocompatible
 
 " Vundle
 set rtp+=~/.vim/bundle/vundle/
-" set rtp+=~/.vim/bundle/my-airline/ " custom airline theme
-call vundle#rc()
-Bundle 'gmarik/vundle'
+
+call vundle#begin()
+Plugin 'gmarik/vundle'
 
 filetype off
 
-" Bundle 'houtsnip/vim-emacscommandline'
-Bundle 'SirVer/ultisnips'
-Bundle 'LaTeX-Box-Team/LaTeX-Box'
-Bundle 'majutsushi/tagbar.git'
-Bundle 'airblade/vim-gitgutter.git'
-Bundle 'tomtom/tcomment_vim.git'
-Bundle 'bling/vim-bufferline'
-Bundle 'bling/vim-airline'
-Bundle 'junegunn/vim-easy-align'
-" Bundle 'airblade/vim-gitgutter'
-Bundle 'tpope/vim-fugitive'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'emacscommandline'
-Bundle 'kien/ctrlp.vim'
-Bundle 'scrooloose/nerdtree'
-Bundle 'plasticboy/vim-markdown'
-Bundle 'isnowfy/python-vim-instant-markdown'
-Bundle 'Shougo/neocomplete.vim'
-" Bundle 'terryma/vim-expand-region'
-Bundle 'justinmk/vim-sneak'
-" Bundle 'scrooloose/syntastic'
-Bundle 'thirtypancakes/my-airline.git'
+Plugin 'houtsnip/vim-emacscommandline'
+Plugin 'SirVer/ultisnips'
+Plugin 'LaTeX-Box-Team/LaTeX-Box'
+Plugin 'majutsushi/tagbar.git'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'tomtom/tcomment_vim.git'
+Plugin 'bling/vim-bufferline'
+Plugin 'bling/vim-airline'
+Plugin 'junegunn/vim-easy-align'
+Plugin 'tpope/vim-fugitive'
+Plugin 'skwp/vim-colors-solarized' " better solarized colours
+Plugin 'emacscommandline'
+Plugin 'kien/ctrlp.vim'
+Plugin 'scrooloose/nerdtree'
+" Plugin 'plasticboy/vim-markdown'
+" Plugin 'isnowfy/python-vim-instant-markdown'
+Plugin 'Shougo/neocomplete.vim'
+Plugin 'terryma/vim-expand-region'
+Plugin 'justinmk/vim-sneak'
+Plugin 'scrooloose/syntastic'
+Plugin 'thirtypancakes/my-airline.git'
+Plugin 'mattn/webapi-vim'
+Plugin 'mattn/gist-vim'
+
+call vundle#end()
 
 filetype plugin indent on
 

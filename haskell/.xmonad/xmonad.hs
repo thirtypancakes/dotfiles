@@ -3,7 +3,9 @@ import XMonad.Actions.CycleWindows
 import XMonad.Actions.CycleWS
 import XMonad.Actions.DwmPromote
 import XMonad.Actions.MouseResize
-import XMonad.Layout.WindowArranger
+import XMonad.Actions.TopicSpace
+import XMonad.Actions.CopyWindow
+import XMonad.Actions.DynamicWorkspaces
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -16,17 +18,21 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.SimplestFloat
 import XMonad.Layout.Tabbed
+import XMonad.Layout.WindowArranger
 
 import XMonad.Prompt
 import XMonad.Prompt.AppendFile
 import XMonad.Prompt.RunOrRaise
 import XMonad.Prompt.Input
 import XMonad.Prompt.Window
+import XMonad.Prompt.Workspace
 
 import XMonad.Util.EZConfig
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.Loggers
+
+import qualified Data.Map as M
 
 import System.IO
 
@@ -35,6 +41,7 @@ import qualified XMonad.StackSet as W   -- manageHook rules
 main :: IO()
 main = do
   status <- spawnPipe myDzenStatus
+  checkTopicConfig myTopics myTopicConfig
   xmonad $ withUrgencyHook NoUrgencyHook $ ewmh defaultConfig
     { modMask            = mod4Mask
     , terminal           = myTerminal
@@ -54,10 +61,10 @@ main = do
     `additionalKeysP` myKeys
 
 myTerminal :: String
-myTerminal = "st"
+myTerminal = "urxvt"
 
-myWorkspaces :: [String]
-myWorkspaces =  ["web","term","music","doc","float","irc"]
+-- myWorkspaces :: [String]
+myWorkspaces =  myTopics
 
 -- scratchpads
 myScratchpads =
@@ -66,7 +73,7 @@ myScratchpads =
   , NS "note" spawnNotes findNotes manageNotes
   ]
   where
-    spawnTerm  = myTerminal ++ " -c scratchpad"
+    spawnTerm  = myTerminal ++ " -name scratchpad"
     findTerm   = resource =? "scratchpad"
     manageTerm = customFloating $ W.RationalRect l t w h
       where
@@ -84,7 +91,7 @@ myScratchpads =
         t = 0.05
         l = (1 - w)/2
 
-    spawnNotes  = myTerminal ++ " -c scratchpad-notes -e tail -f ~/notes"
+    spawnNotes  = myTerminal ++ " -name scratchpad-notes -e tail -f ~/notes"
     findNotes   = resource =? "scratchpad-notes"
     manageNotes = customFloating $ W.RationalRect l t w h
       where
@@ -98,9 +105,7 @@ myManageHook = composeAll
   [ className =? "MPlayer"              --> doFloat
   , className =? "Gnome-mplayer"        --> doCenterFloat
   , className =? "Nm-connection-editor" --> doCenterFloat
-  -- , className =? "Wrapper"              --> doFloatAt 0.835 0.80
   , className =? "Nitrogen"             --> doCenterFloat
-  , className =? "Xchat"                --> doF (W.shift (myWorkspaces !! 4))
   , className =? "Xfce4-mixer"          --> doCenterFloat
   , isFullscreen                        --> doFullFloat
   , isDialog                            --> doCenterFloat
@@ -171,11 +176,75 @@ myDzenPP  = dzenPP
     where
       noScratchPad ws = if ws == "NSP" then "" else ws
 
+myTopics :: [Topic]
+myTopics =
+   [ "web"
+   , "dotfiles"
+   , "term"
+   , "media"
+   , "doc"
+   , "irc"
+   ]
+
+myTopicConfig :: TopicConfig
+myTopicConfig = TopicConfig
+    { topicDirs = M.fromList $
+        [ ("web", "~/")
+        , ("dotfiles" , "~/dotfiles2/")
+        , ("term"     , "~/")
+        , ("doc"      , "~/documents/")
+        , ("media"    , "/media/mac-media/")
+        , ("irc"      , "~/")
+        ]
+    -- , defaultTopicAction = const (return ())
+    , defaultTopicAction = const $ runShell >*> 3
+    , defaultTopic = "dashboard"
+    , maxTopicHistory = 10
+    , topicActions = M.fromList $
+        [ ("web",       spawn "chromium")
+        , ("dotfiles",  runVim >>
+                        runShell)
+        , ("media",     runShell)
+        , ("doc",       runVim >>
+                        runShell >>
+                        runShell)
+        , ("irc",       spawn ircCmd)
+        ]
+    }
+
+ircCmd :: String
+ircCmd = "xchat"
+
+spawnShellIn :: Dir -> X ()
+spawnShellIn dir = spawn $ "urxvt -cd " ++ dir
+
+runShell :: X ()
+runShell = currentTopicDir myTopicConfig >>= spawnShellIn
+
+spawnVim :: Dir -> X ()
+spawnVim dir = spawn $ "urxvt -cd " ++ dir ++ " -e vim"
+
+runVim :: X ()
+runVim = currentTopicDir myTopicConfig >>= spawnVim
+
+goto :: Topic -> X ()
+goto = switchTopic myTopicConfig
+
+promptedGoto :: X ()
+promptedGoto = workspacePrompt myXPConfig goto
+
+promptedShift :: X ()
+promptedShift = workspacePrompt myXPConfig $ windows . W.shift
+
+promptedCopy :: X ()
+promptedCopy = workspacePrompt myXPConfig $ windows . copy
+
 -- keybindings
 myKeys =
   [ ("M-b"           , sendMessage ToggleStruts                    )
   , ("M1-<Tab>"      , cycleRecentWindows [xK_Alt_L] xK_Tab xK_Tab )
   , ("M-<Return>"    , dwmpromote                                  )
+  , ("M-S-<Return>"  , runShell                                    )
   , ("M-r"           , spawn "xmonad --restart"                    )
   , ("M-w"           , spawn "chromium"                            )
   , ("M-S-w"         , spawn "chromium --incognito"                )
@@ -184,4 +253,11 @@ myKeys =
   , ("M-S-n"         , namedScratchpadAction myScratchpads "note"  )
   , ("M-i"           , runOrRaisePrompt myXPConfig                 )
   , ("M-g"           , windowPromptGoto myXPConfig                 )
+  , ("M-;"           , promptedGoto                                )
+  , ("M-S-;"         , promptedShift                               )
+  , ("M-C-;"         , promptedCopy                                )
+  , ("M-S-<Backspace>", removeWorkspace                            )
+  , ("M-'"           , toggleWS                                    )
+  , ("M-a"           , currentTopicAction myTopicConfig            )
+
   ]

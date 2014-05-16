@@ -4,6 +4,7 @@
 
 Emacs.font: DejaVu Sans Mono-10
 
+URxvt.letterSpace:           -1
 URxvt.intensifyStyles:      true
 URxvt.depth:                32
 URxvt.geometry:             90x30
