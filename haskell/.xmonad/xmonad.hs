@@ -19,6 +19,7 @@ import XMonad.Layout.PerWorkspace
 import XMonad.Layout.SimplestFloat
 import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowArranger
+import XMonad.Layout.MouseResizableTile
 
 import XMonad.Prompt
 import XMonad.Prompt.AppendFile
@@ -123,15 +124,19 @@ myLayoutHook = avoidStruts
       myTabbed = tabbed shrinkText myTabConfig
       float    = simplestFloat
       full     = Full
-      mtiled   = Mirror tiled
-      tiled    = Tall 1 (5/100) (2/(1+(toRational(sqrt(5)::Double))))
+      mtiled = mouseResizableTileMirrored
+      -- tiled    = Tall 1 (5/100) (2/(1+(toRational(sqrt(5)::Double))))
+      tiled = mouseResizableTile
+        {  draggerType = FixedDragger 3 3
+        , nmaster = 1
+        }
 
 -- tab decoration
 myTabConfig = defaultTheme
-  { activeColor         = "#2d2d2d"
-  , inactiveColor       = "#2d2d2d"
-  , activeBorderColor   = "#2d2d2d"
-  , inactiveBorderColor = "#2d2d2d"
+  { activeColor         = "#333333"
+  , inactiveColor       = "#333333"
+  , activeBorderColor   = "#333333"
+  , inactiveBorderColor = "#333333"
   , activeTextColor     = "#268bd2"
   , inactiveTextColor   = "#777777"
   , decoHeight          = 25
@@ -140,11 +145,11 @@ myTabConfig = defaultTheme
 
 -- prompt decoration
 myXPConfig = defaultXPConfig
-   { bgColor         = "#2d2d2d"
+   { bgColor         = "#333333"
    , fgColor         = "#777777"
    , fgHLight        = "#268bd2"
-   , bgHLight        = "#2d2d2d"
-   , borderColor     = "#2d2d2d"
+   , bgHLight        = "#333333"
+   , borderColor     = "#333333"
    , position        = Top
    , font            = "xft:DejaVu Sans:size=10"
    , alwaysHighlight = True
@@ -153,7 +158,7 @@ myXPConfig = defaultXPConfig
 
 -- dzen
 myDzenStatus = "dzen2 -w '1150' -ta 'l'" ++ myDzenStyle
-myDzenStyle  = " -dock -h '20' -fg '#777777' -bg '#2d2d2d' -fn 'xft:DejaVu Sans:size=10'"
+myDzenStyle  = " -dock -h '20' -fg '#777777' -bg '#333333' -fn 'xft:DejaVu Sans:size=10'"
 
 myLogHook h = dynamicLogWithPP $ myDzenPP { ppOutput = hPutStrLn h }
 
@@ -166,11 +171,11 @@ myDzenPP  = dzenPP
   , ppTitle   = dzenColor "#ffffff" "" . pad
   , ppLayout  = dzenColor "#268bd2" "" .
               (\x -> case x of
-                "Full"            -> "^i(/home/chris/.xmonad/icons/monocle.xbm)"
-                "Tall"            -> "^i(/home/chris/.xmonad/icons/tile.xbm)"
-                "Mirror Tall"     -> "^i(/home/chris/.xmonad/icons/mtile.xbm)"
-                "SimplestFloat"   -> "^i(/home/chris/.xmonad/icons/float.xbm)"
-                "Tabbed Simplest" -> "^i(/home/chris/.xmonad/icons/tabbed.xbm)"
+                "Full"                      -> "^i(/home/chris/.xmonad/icons/monocle.xbm)"
+                "MouseResizableTile"        -> "^i(/home/chris/.xmonad/icons/tile.xbm)"
+                "Mirror MouseResizableTile" -> "^i(/home/chris/.xmonad/icons/mtile.xbm)"
+                "SimplestFloat"             -> "^i(/home/chris/.xmonad/icons/float.xbm)"
+                "Tabbed Simplest"           -> "^i(/home/chris/.xmonad/icons/tabbed.xbm)"
               )
   }
     where
@@ -222,7 +227,7 @@ runShell :: X ()
 runShell = currentTopicDir myTopicConfig >>= spawnShellIn
 
 spawnVim :: Dir -> X ()
-spawnVim dir = spawn $ "urxvt -cd " ++ dir ++ " -e vim"
+spawnVim dir = spawn $ "urxvt -cd " ++ dir ++ " -e vim --servername VIM"
 
 runVim :: X ()
 runVim = currentTopicDir myTopicConfig >>= spawnVim
@@ -259,5 +264,6 @@ myKeys =
   , ("M-S-<Backspace>", removeWorkspace                            )
   , ("M-'"           , toggleWS                                    )
   , ("M-a"           , currentTopicAction myTopicConfig            )
-
+  , ("M-["           , sendMessage ExpandSlave )
+  , ("M-]"           , sendMessage ShrinkSlave )
   ]

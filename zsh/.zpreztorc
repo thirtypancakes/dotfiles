@@ -130,6 +130,7 @@ zstyle ':prezto:module:syntax-highlighting' highlighters \
 zstyle ':prezto:module:syntax-highlighting' styles \
   'builtin' 'bg=blue' \
   'command' 'bg=blue' \
+  'brackets' 'bg=ble' \
   'function' 'bg=blue'
 
 #

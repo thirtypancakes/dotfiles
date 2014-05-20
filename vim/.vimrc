@@ -32,13 +32,21 @@ Plugin 'scrooloose/syntastic'
 Plugin 'thirtypancakes/my-airline.git'
 Plugin 'mattn/webapi-vim'
 Plugin 'mattn/gist-vim'
+Plugin 'YankRing.vim'
+Plugin 'sjl/gundo.vim'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-session'
 
 call vundle#end()
 
 filetype plugin indent on
 
+" Some custom highlighting
+" hi VertSplit guifg=bg guibg=bg
+
 " Sets
 " misc
+set ttimeoutlen=0
 set autochdir
 set nowrap
 set noshowmode
@@ -130,35 +138,41 @@ let g:neocomplete#enable_at_startup = 1
 " nerdtree
 let g:NERDTreeShowHidden=1
 
-" Some custom highlighting
-hi VertSplit guifg=bg guibg=bg
+" yankring
+let g:yankring_history_dir = '~/dotfiles2/vim/.vim/'
 
+" Maps
 " leader key
 let mapleader="\<Space>"
 let maplocalleader="\<Space>"
 
+" vim-session
+let g:session_autosave = 1
+let g:session_autosave = 'no'
+
 " easyalign
 vmap <Enter> <Plug>(EasyAlign)
-nmap <Leader>a <Plug>(EasyAlign)
+nmap <leader>a <Plug>(EasyAlign)
 
 " nerdtree
-map <C-e> :NERDTreeToggle<CR>
+map <C-e> :NERDTreeToggle<cr>
 
 " buffers
-nmap <C-1> :bn<CR>
-nmap <C-2> :bp<CR>
+nmap <C-1> :bn<cr>
+nmap <C-2> :bp<cr>
 
 " ctrlp
-map <C-f> :CtrlPLine<CR>
-noremap <Leader>o :CtrlP<CR>
+map <C-f> :CtrlPLine<cr>
+noremap <leader>o :CtrlP<cr>
+noremap <leader>l :CtrlPBuffer<cr>
 
 " better clipboard copy paste
-vmap <Leader>y "+y
-vmap <Leader>d "+d
-nmap <Leader>p "+p
-nmap <Leader>P "+P
-vmap <Leader>p "+p
-vmap <Leader>P "+P
+vmap <leader>y "+y
+vmap <leader>d "+d
+nmap <leader>p "+p
+nmap <leader>P "+P
+vmap <leader>p "+p
+vmap <leader>P "+P
 
 vnoremap <silent> y y`]
 vnoremap <silent> p p`]
@@ -178,3 +192,9 @@ vmap <C-v> <Plug>(expand_region_shrink)
 
 " neocomplete
 inoremap <expr><C-g> neocomplete#undo_completion()
+
+" Gundo
+noremap <leader>u :GundoToggle<cr>
+
+" YankRing
+nnoremap <leader>yr :YRShow<cr>
