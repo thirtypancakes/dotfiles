@@ -8,7 +8,7 @@ xfce4-panel --disable-wm-check &
 xfce4-volumed &
 setxkbmap -option ctrl:nocaps -layout gb -variant mac &
 xsetroot -cursor_name left_ptr &
-xcape &
+(sleep 2s && xcape) &
 
 (sleep 2s && xmodmap -e "keycode 49 = numbersign asciitilde") &
 

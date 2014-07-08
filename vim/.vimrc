@@ -17,7 +17,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tomtom/tcomment_vim.git'
 Plugin 'bling/vim-bufferline'
 Plugin 'bling/vim-airline'
-Plugin 'junegunn/vim-easy-align'
+" Plugin 'junegunn/vim-easy-align'
 Plugin 'tpope/vim-fugitive'
 Plugin 'skwp/vim-colors-solarized' " better solarized colours
 Plugin 'emacscommandline'
@@ -36,6 +36,8 @@ Plugin 'YankRing.vim'
 Plugin 'sjl/gundo.vim'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
+Plugin 'tommcdo/vim-lion'
+Plugin 'junegunn/vim-easy-align'
 
 call vundle#end()
 
@@ -93,9 +95,13 @@ colorscheme solarized
 
 " Lets
 " airline
-let g:airline_powerline_fonts = 1
+" let g:airline_powerline_fonts = 1
 let g:airline#extensions#bufferline#overwrite_variables = 1
 let g:airline_theme = 'solarizedish'
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#right_sep = ' '
+let g:airline#extensions#tabline#right_alt_sep = '|'
 
 " highlight bufferline_selected ctermfg=3 gui=bold cterm=bold term=bold
 " highlight link bufferline_selected_iairline_c_inactive
@@ -139,7 +145,7 @@ let g:neocomplete#enable_at_startup = 1
 let g:NERDTreeShowHidden=1
 
 " yankring
-let g:yankring_history_dir = '~/dotfiles2/vim/.vim/'
+let g:yankring_history_dir = '~/dotfiles/vim/.vim/'
 
 " Maps
 " leader key
@@ -148,7 +154,13 @@ let maplocalleader="\<Space>"
 
 " vim-session
 let g:session_autosave = 1
-let g:session_autosave = 'no'
+let g:session_autosave = 'yes'
+let g:session_autoload = 'yes'
+
+let g:airline_left_sep = '█'
+let g:airline_left_alt_sep = '|'
+let g:airline_right_sep = '█'
+let g:airline_right_alt_sep = '|'
 
 " easyalign
 vmap <Enter> <Plug>(EasyAlign)
@@ -196,5 +208,5 @@ inoremap <expr><C-g> neocomplete#undo_completion()
 " Gundo
 noremap <leader>u :GundoToggle<cr>
 
-" YankRing
+" yankring
 nnoremap <leader>yr :YRShow<cr>

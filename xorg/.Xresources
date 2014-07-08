@@ -1,4 +1,3 @@
-! URxvt*letterSpace:          0
 URxvt*depth:                32
 URxvt*geometry:             90x30
 URxvt*saveLines:            50
@@ -7,8 +6,8 @@ URxvt*lineSpace:            0
 Urxvt*scrollStyle:          rxvt
 URxvt*scrollBar:            false
 URxvt*urgentOnBell:         true
-URxvt*boldFont:             xft:DejaVu Sans Mono for Powerline:bold:size=10
-URxvt*font:                 xft:DejaVu SansMono for Powerline:size=10
+! URxvt*boldFont:             xft:DejaVu Sans Mono for Powerline:bold:size=10
+URxvt*font:                 xft:Fira Mono for Powerline:size=10
 URxvt.iconFile:             /usr/share/icons/Numix-Circle/48x48/apps/terminal.svg
 
 URxvt*background:            #002b36

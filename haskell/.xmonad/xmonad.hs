@@ -27,6 +27,7 @@ import XMonad.Prompt.RunOrRaise
 import XMonad.Prompt.Input
 import XMonad.Prompt.Window
 import XMonad.Prompt.Workspace
+import XMonad.Prompt.AppLauncher
 
 import XMonad.Util.EZConfig
 import XMonad.Util.NamedScratchpad
@@ -108,6 +109,7 @@ myManageHook = composeAll
   , className =? "Nm-connection-editor" --> doCenterFloat
   , className =? "Nitrogen"             --> doCenterFloat
   , className =? "Xfce4-mixer"          --> doCenterFloat
+  , className =? "Xfce4-notifyd"        --> doIgnore
   , isFullscreen                        --> doFullFloat
   , isDialog                            --> doCenterFloat
   ]
@@ -127,16 +129,13 @@ myLayoutHook = avoidStruts
       mtiled = mouseResizableTileMirrored
       -- tiled    = Tall 1 (5/100) (2/(1+(toRational(sqrt(5)::Double))))
       tiled = mouseResizableTile
-        {  draggerType = FixedDragger 3 3
-        , nmaster = 1
-        }
 
 -- tab decoration
 myTabConfig = defaultTheme
   { activeColor         = "#333333"
-  , inactiveColor       = "#333333"
+  , inactiveColor       = "#3C3C3C"
   , activeBorderColor   = "#333333"
-  , inactiveBorderColor = "#333333"
+  , inactiveBorderColor = "#3C3C3C"
   , activeTextColor     = "#268bd2"
   , inactiveTextColor   = "#777777"
   , decoHeight          = 25
@@ -195,7 +194,7 @@ myTopicConfig :: TopicConfig
 myTopicConfig = TopicConfig
     { topicDirs = M.fromList $
         [ ("web", "~/")
-        , ("dotfiles" , "~/dotfiles2/")
+        , ("dotfiles" , "~/dotfiles/")
         , ("term"     , "~/")
         , ("doc"      , "~/documents/")
         , ("media"    , "/media/mac-media/")
@@ -207,8 +206,7 @@ myTopicConfig = TopicConfig
     , maxTopicHistory = 10
     , topicActions = M.fromList $
         [ ("web",       spawn "chromium")
-        , ("dotfiles",  runVim >>
-                        runShell)
+        , ("dotfiles",  runVim)
         , ("media",     runShell)
         , ("doc",       runVim >>
                         runShell >>
@@ -221,16 +219,21 @@ ircCmd :: String
 ircCmd = "xchat"
 
 spawnShellIn :: Dir -> X ()
-spawnShellIn dir = spawn $ "urxvt -cd " ++ dir
+spawnShellIn dir = spawn $ myTerminal ++ " -cd " ++ dir
 
 runShell :: X ()
 runShell = currentTopicDir myTopicConfig >>= spawnShellIn
 
 spawnVim :: Dir -> X ()
-spawnVim dir = spawn $ "urxvt -cd " ++ dir ++ " -e vim --servername VIM"
+spawnVim dir = spawn $ myTerminal ++ " -cd " ++ dir ++ " -e vim"
 
 runVim :: X ()
 runVim = currentTopicDir myTopicConfig >>= spawnVim
+
+spawnChrome = spawn "chromium --new-window http://xmonad.org/xmonad-docs/xmonad-contrib/"
+
+runChrome :: X ()
+runChrome = spawnChrome
 
 goto :: Topic -> X ()
 goto = switchTopic myTopicConfig
@@ -246,24 +249,24 @@ promptedCopy = workspacePrompt myXPConfig $ windows . copy
 
 -- keybindings
 myKeys =
-  [ ("M-b"           , sendMessage ToggleStruts                    )
-  , ("M1-<Tab>"      , cycleRecentWindows [xK_Alt_L] xK_Tab xK_Tab )
-  , ("M-<Return>"    , dwmpromote                                  )
-  , ("M-S-<Return>"  , runShell                                    )
-  , ("M-r"           , spawn "xmonad --restart"                    )
-  , ("M-w"           , spawn "chromium"                            )
-  , ("M-S-w"         , spawn "chromium --incognito"                )
-  , ("M-e"           , spawn "nautilus"                            )
-  , ("M-o"           , namedScratchpadAction myScratchpads "term"  )
-  , ("M-S-n"         , namedScratchpadAction myScratchpads "note"  )
-  , ("M-i"           , runOrRaisePrompt myXPConfig                 )
-  , ("M-g"           , windowPromptGoto myXPConfig                 )
-  , ("M-;"           , promptedGoto                                )
-  , ("M-S-;"         , promptedShift                               )
-  , ("M-C-;"         , promptedCopy                                )
-  , ("M-S-<Backspace>", removeWorkspace                            )
-  , ("M-'"           , toggleWS                                    )
-  , ("M-a"           , currentTopicAction myTopicConfig            )
-  , ("M-["           , sendMessage ExpandSlave )
-  , ("M-]"           , sendMessage ShrinkSlave )
+  [ ("M-b"             , sendMessage ToggleStruts                         )
+  , ("M1-<Tab>"        , cycleRecentWindows [xK_Alt_L] xK_Tab xK_Tab      )
+  , ("M-<Return>"      , dwmpromote                                       )
+  , ("M-S-<Return>"    , runShell                                         )
+  , ("M-r"             , spawn "xmonad --restart"                         )
+  , ("M-w"             , spawn "chromium"                                 )
+  , ("M-S-w"           , spawn "chromium --incognito"                     )
+  , ("M-o"             , namedScratchpadAction myScratchpads "term"       )
+  , ("M-S-n"           , namedScratchpadAction myScratchpads "note"       )
+  , ("M-i"             , runOrRaisePrompt myXPConfig                      )
+  , ("M-g"             , windowPromptGoto myXPConfig                      )
+  , ("M-;"             , promptedGoto                                     )
+  , ("M-S-;"           , promptedShift                                    )
+  , ("M-C-;"           , promptedCopy                                     )
+  , ("M-S-<Backspace>" , removeWorkspace                                  )
+  , ("M-'"             , toggleWS                                         )
+  , ("M-a"             , currentTopicAction myTopicConfig                 )
+  , ("M-["             , sendMessage ExpandSlave                          )
+  , ("M-]"             , sendMessage ShrinkSlave                          )
+  , ("M-S-l"           , launchApp myXPConfig "urxvt -e vim --servername" )
   ]
