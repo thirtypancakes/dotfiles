@@ -1,8 +1,8 @@
-#dotfiles
+# dotfiles
 
 Various configuration files for archlinux, shamelessly stolen from around the internet.
 
-##How to install
+## How to install
 
 1. install [stow](http://www.gnu.org/software/stow/)
 2. clone the repository into `~/dotfiles`
